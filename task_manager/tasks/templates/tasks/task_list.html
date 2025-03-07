@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <a href="{% url 'task_create' %}">Add task</a>
+    <ul>
+        {% for task in tasks %}
+            <li>
+                {{ task.title }} - {{ task.completed|yesno:'Done, In Progress' }}
+                <a href="{% url 'task_delete' task.id %}">Delete</a>
+            </li>
+        {% empty %}
+            <h1>No tasks</h1>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
