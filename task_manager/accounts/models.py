@@ -24,7 +24,7 @@ class CustomUserManager(BaseUserManager):
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must have is_superuser=True.")
 
-        return self.create_user(phone_number, email, password, **extra_fields)
+        return self.create_user(email, phone_number, password, **extra_fields)
 
     def active_users_after_date(self, date):
         return self.filter(is_active=True, date_joined__gte=date)
@@ -44,7 +44,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
                                           choices=[('ua', 'ukranian'), ('en', 'english')],
                                          default='en',
                                          verbose_name='language')
-    objects = CustomUserManager
+    objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone_number']
@@ -53,7 +53,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'user'
         verbose_name_plural = 'users'
         permissions = [
-            ('can_view_profiles', 'can watch profiles another users'),
+            ('can_view_profiles', 'Can watch profiles another users'),
+            ('can_edit_profiles', 'Can edit profiles another users'),
         ]
 
     def __str__(self):
