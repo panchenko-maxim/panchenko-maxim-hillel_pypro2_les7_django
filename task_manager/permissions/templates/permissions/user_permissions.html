@@ -13,7 +13,7 @@
                 <tr>
                     <th>Permission</th>
                     <th>Description</th>
-                    <th>Status</th>d
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,8 +22,8 @@
                         <td>{{ permission.codename }}</td>
                         <td>{{ permission.name }}</td>
                         <td>
-                            <input type="checkbox" name="permissions" value="{{ permission.codename }}">
-                            {% if permission in user_permissions %} checked {% endif %}
+                            <input type="checkbox" name="permissions" value="{{ permission.id }}"
+                            {% if permission in user_permissions %} checked {% endif %}>
                         </td>
                     </tr>
                 {% endfor %}

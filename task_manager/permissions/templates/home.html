@@ -9,7 +9,7 @@
     {% if user.is_authenticated %}
         <p>Hello, {{ user.email }}</p>
         {% if user.is_superuser %}
-            <a href="{% url 'manage_permissions' %}">Manage permissions</a>
+            <a href="{% url 'list_users' %}">Manage permissions</a>
         {% endif %}
         <a href="{% url 'logout' %}">Exit</a>
     {% else %}

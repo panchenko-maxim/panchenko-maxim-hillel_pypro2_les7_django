@@ -30,7 +30,7 @@ def list_users(request):
         return redirect('home')
 
     users = User.objects.all().exclude(id=request.user.id)
-    return redirect(request,'permissions/user_list.html', {'users': users})
+    return render(request,'permissions/list_users.html', {'users': users})
 
 @login_required()
 def manage_permissions(request, user_id):
@@ -40,14 +40,14 @@ def manage_permissions(request, user_id):
 
     user = get_object_or_404(User, id = user_id)
 
-    content_type = ContentType.objects.get(app_label='accounts', model='custom_user')
+    content_type = ContentType.objects.get(app_label='accounts', model='customuser')
     user_model_permissions = Permission.objects.filter(content_type=content_type)
 
     if request.method == 'POST':
         selected_permissions = request.POST.getlist('permissions')
         user.user_permissions.set(selected_permissions)
         messages.success(request, "Permissions granted successfully")
-        return redirect('manage_permissions')
+        return redirect('manage_permissions', user_id=user.id)
 
     context = {
         'user': user,
@@ -55,6 +55,18 @@ def manage_permissions(request, user_id):
         'user_permissions': user.user_permissions.all(),
     }
     return render(request, 'permissions/user_permissions.html', context)
+
+def tags_page(request):
+    var1, var2, var3 = None, "Second var", "Third var"
+    context = {
+        'var1': var1,
+        'var2': var2,
+        'var3': var3,
+        'text_var': 'hello lol',
+        'some_fruits': ['apple', 'banana', 'orange', 'potato'],
+        'fruit': 'sugar',
+    }
+    return render(request, 'tags.html', context)
 
 
 
