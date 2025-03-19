@@ -1,0 +1,33 @@
+{% load custom_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <p>{% firstof var1 var2 var3 %}</p>
+    <p>{{ text_var|upper }}</p>
+
+    {% comment "Some text" %}<p>Comment text</p> {% endcomment %}
+
+    {% with total=user.user_permissions.all.count %}
+        <p>User {{ user.email }} have {{ total }} permission{{ total|pluralize }}</p>
+        {{ total|add:'3' }}
+        <p>Simple tag: {%  multiply 5 6 %}</p>
+    {% endwith %}
+
+    <br>
+    {% uppercasecustom %} Hello world {% enduppercase %}
+
+    <p>{{ 1234567895|format_number }}</p>
+
+    {% if fruit|in_list:some_fruits %}
+        {{ fruit }} in_list
+    {% else %}
+        {{ fruit }} not in_list
+    {% endif %}
+
+</body>
+</html>
