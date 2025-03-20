@@ -65,5 +65,33 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return f'{self.first_name} {self.last_name}'.strip()
 
 
+class UserAddress(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='Addresses')
+    city = models.CharField(max_length=100, verbose_name='City')
+    street = models.CharField(max_length=150, verbose_name='Street')
+    postal_code = models.CharField(max_length=10, verbose_name='Index')
+
+    class Meta:
+        verbose_name = 'User`s address'
+        verbose_name_plural = 'Addresses of users'
+
+    def __str__(self):
+        return f'{self.city}, {self.street}'
+
+
+class UserPayment(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='payments')
+    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Summ')
+    payment_date = models.DateTimeField(default=timezone.now, verbose_name='Payment date')
+    payment_method = models.CharField(max_length=50, choices=[
+        ('card', 'Card'),
+        ('cash', 'Cash'),
+        ('iban', 'Iban'),
+    ], default='card', verbose_name='Payment method')
+
+    def __str__(self):
+        return f'{self.user.email} - {self.amount}({self.payment_date})'
+
+
 
 
