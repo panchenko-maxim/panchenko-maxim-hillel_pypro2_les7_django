@@ -31,4 +31,13 @@ class CustomUserAdmin(BaseUserAdmin):
     list_filter = ('is_active', 'preferred_language')
     search_fields = ('email', 'phone_number', 'first_name', 'last_name')
     ordering = ('-date_joined',)
+
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        # ('Edit password', {'fields': ('new_password1', 'new_password2'), 'classes': ('collapse',)}),
+        ('Personal data', {'fields': ('first_name', 'last_name', 'phone_number', 'date_of_birth', 'profile_of_picture'),
+                           'classes': ('wide',)}),
+
+
+    )
     
