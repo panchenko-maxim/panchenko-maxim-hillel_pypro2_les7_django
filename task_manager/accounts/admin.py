@@ -1,5 +1,3 @@
-from distutils.command.clean import clean
-
 from django.contrib import admin
 from django import forms
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -143,5 +141,5 @@ class CustomUserAdmin(BaseUserAdmin):
     activate_users.short_description = "Activate select users"
 
     class Media:
-        js = ('js/admin_custom.js')
+        js = ('admin/js/admin_custom.js')
 
