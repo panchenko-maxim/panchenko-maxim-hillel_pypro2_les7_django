@@ -101,13 +101,14 @@ class CustomUserAdmin(BaseUserAdmin):
     inlines = [UserAddressInline, UserPaymentInLine]
     form = CustomUserChangeForm
     add_form = CustomUserCreationForm
-    list_display = ('email', 'phone_number', 'is_active')
+    list_display = ('email', 'full_name', 'phone_number', 'is_active', 'payment_total')
     list_filter = ('is_active', 'preferred_language')
     search_fields = ('email', 'phone_number', 'first_name', 'last_name')
     ordering = ('-date_joined',)
+    actions = ['activate_users', 'deactivate_users']
 
     fieldsets = (
-        (None, {'fields': ('email',)}),
+        (None, {'fields': ('email', 'is_active')}),
         ('Edit password', {'fields': ('new_password1', 'new_password2'), 'classes': ('collapse',)}),
         ('Personal data', {'fields': ('first_name', 'last_name', 'phone_number', 'date_of_birth', 'profile_of_picture'),
                            'classes': ('wide',)}),
@@ -121,4 +122,26 @@ class CustomUserAdmin(BaseUserAdmin):
             'fields': ('email', 'phone_number', 'password1', 'password2', 'first_name', 'last_name', 'date_of_birth',)
         }),
     )
-    
+
+    def full_name(self, obj):
+        return obj.full_name
+    full_name.short_description = 'Full name'
+
+    def payment_total(self, obj):
+        total = sum(payment.amount for payment in obj.payments.all())
+        return f'{total} grn'
+    payment_total.short_description = 'Total sum payments'
+
+    def deactivate_users(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'Deactivate {updated} users')
+    deactivate_users.short_description = "Deactivate select users"
+
+    def activate_users(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'Activate {updated} users')
+    activate_users.short_description = "Activate select users"
+
+    class Media:
+        js = ('js/admin_custom.js')
+
