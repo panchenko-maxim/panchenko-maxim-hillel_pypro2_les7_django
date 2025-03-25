@@ -6,6 +6,8 @@ from django.urls import reverse_lazy
 from tasks.models import Task
 from tasks.forms import TaskForm
 
+from tasks.mixins import OwnerOnlyMixin
+
 
 # @login_required
 # def tasks_list(request):
@@ -19,6 +21,8 @@ class TaskListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         tasks = super().get_queryset()
+        if self.request.user.is_superuser:
+            return tasks
         return tasks.filter(user=self.request.user)
 
 # @login_required
@@ -52,7 +56,7 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
 #         return redirect("task_list")
 #     return render(request, 'tasks/confirm_delete.html', {'task': task})
 
-class TaskDeleteView(LoginRequiredMixin, DeleteView):
+class TaskDeleteView(LoginRequiredMixin, OwnerOnlyMixin, DeleteView):
     model = Task
     template_name = 'tasks/confirm_delete.html'
     success_url = reverse_lazy('task_list')
