@@ -6,7 +6,8 @@ from django.urls import reverse_lazy
 from tasks.models import Task
 from tasks.forms import TaskForm
 
-from tasks.mixins import OwnerOnlyMixin
+from tasks.mixins import (OwnerOnlyMixin, SuccessMessageMixin, QueryFilterMixin,
+                          TaskCounterMixin, RedirectOnErrorMixin)
 
 
 # @login_required
@@ -14,7 +15,7 @@ from tasks.mixins import OwnerOnlyMixin
 #     tasks = Task.objects.filter(user=request.user)
 #     return render(request, 'tasks/task_list.html', {'tasks': tasks})
 
-class TaskListView(LoginRequiredMixin, ListView):
+class TaskListView(LoginRequiredMixin, QueryFilterMixin, TaskCounterMixin, ListView):
     model = Task
     template_name = 'tasks/task_list.html'
     context_object_name = 'tasks'
@@ -38,11 +39,13 @@ class TaskListView(LoginRequiredMixin, ListView):
 #         form = TaskForm()
 #         return render(request, 'tasks/create_task.html', {'form': form})
 
-class TaskCreateView(LoginRequiredMixin, CreateView):
+class TaskCreateView(LoginRequiredMixin, SuccessMessageMixin, RedirectOnErrorMixin, CreateView):
     model = Task
     form_class = TaskForm
     template_name = 'tasks/create_task.html'
     success_url = reverse_lazy('task_list')
+    success_message = 'Task created success!'
+    error_redirect_url = reverse_lazy('task_list')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -56,11 +59,12 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
 #         return redirect("task_list")
 #     return render(request, 'tasks/confirm_delete.html', {'task': task})
 
-class TaskDeleteView(LoginRequiredMixin, OwnerOnlyMixin, DeleteView):
+class TaskDeleteView(LoginRequiredMixin, OwnerOnlyMixin, SuccessMessageMixin, DeleteView):
     model = Task
     template_name = 'tasks/confirm_delete.html'
     success_url = reverse_lazy('task_list')
     pk_url_kwarg = 'task_id'
+    success_message = 'Deleted success!'
 
 
 
