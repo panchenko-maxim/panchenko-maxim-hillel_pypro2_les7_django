@@ -107,7 +107,7 @@ class CustomUserAdmin(BaseUserAdmin):
 
     fieldsets = (
         (None, {'fields': ('email', 'is_active')}),
-        ('Edit password', {'fields': ('new_password1', 'new_password2'), 'classes': ('collapse',)}),
+        ('Edit password', {'fields': ('new_password1', 'new_password2'), 'classes': ('collapse',)})
         ('Roots', {'fields': ('is_staff', 'is_superuser'), 'classes': ('collapse',)}),
         ('Personal data', {'fields': ('first_name', 'last_name', 'phone_number', 'date_of_birth', 'profile_of_picture'),
                            'classes': ('wide',)}),

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List</title>
+    <style>
+        .completed { text-decoration: line-through; color: gray }
+    </style>
+</head>
+<body>
+    <input type="text" id="taskInput" placeholder="New task">
+    <button onclick="addTask()">Add task</button>
+    <ul id="taskList"></ul>
+
+    <script>
+        function addTask() {
+            let taskContent = document.getElementById("taskInput").value;
+            if (taskContent.trim() === "") return;
+
+            let li = document.createElement("li")
+            li.innerHTML = `${taskContent} <button onclick="this.parentElement.remove()">Delete</button>`
+            li.onclick = function () {this.classList.toggle("completed");}
+            document.getElementById("taskList").appendChild(li);
+            document.getElementById("taskInput").value = "";
+        }
+    </script>
+
+</body>
+</html>
