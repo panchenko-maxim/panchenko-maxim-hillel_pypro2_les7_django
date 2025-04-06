@@ -15,13 +15,18 @@
                 $('#fetchData').click(
                     function () {
                         $.ajax({
-                            url: '',
+                            url: 'https://jsonplaceholder.typicode.com/posts',
                             method: 'GET',
                             success: function (data) {
-                                $('#dataContainer').html(
-                                    `<h2>$(data.title)</h2>
-                                    <p>$(data.body)</p>`
-                                );
+                                data.forEach(element => {
+                                    $('#dataContainer').append(
+                                        `<div>
+                                            <p>Name${element.id}</p>
+                                            <p>Name${element.title}</p>
+                                            <p>Name${element.body}</p>
+                                         </div>`
+                                    );
+                                });
                             },
                             error: function (error) {
                                 $('#dataContainer').html("Fetching error: ");
