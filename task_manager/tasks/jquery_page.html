@@ -6,6 +6,7 @@
     <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
+    <input type="text" id="urlInput" placeholder="Enter Url">
     <button id="fetchData">Collect data</button>
     <div id="dataContainer"></div>
 
@@ -14,16 +15,19 @@
             function () {
                 $('#fetchData').click(
                     function () {
+                        let urlInput = $('#urlInput').val();
+
+                        if (urlInput === "") return;
                         $.ajax({
-                            url: 'https://jsonplaceholder.typicode.com/posts',
+                            url: urlInput,
                             method: 'GET',
                             success: function (data) {
                                 data.forEach(element => {
                                     $('#dataContainer').append(
                                         `<div>
-                                            <p>Name${element.id}</p>
-                                            <p>Name${element.title}</p>
-                                            <p>Name${element.body}</p>
+                                            <p>Name: ${element.name}</p>
+                                            <p>Email: ${element.email}</p>
+                                            <p>Body: ${element.body}</p>
                                          </div>`
                                     );
                                 });
