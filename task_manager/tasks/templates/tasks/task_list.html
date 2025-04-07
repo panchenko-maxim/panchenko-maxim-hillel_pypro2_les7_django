@@ -6,11 +6,14 @@
 </head>
 <body>
     <a href="{% url 'task_create' %}">Add task</a>
-    {% if messages %}
-        {% for message in messages %}
-            <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-    {% endif %}
+    <div class="messages">
+        {% if messages %}
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        {% endif %}
+    </div>
+
     <div>
         <a href="?completed=true">Completed tasks</a>
         <a href="?completed=false">In progress tasks</a>
@@ -30,6 +33,7 @@
             <li>
                 {{ task.title }} - {{ task.completed|yesno:'Done, In Progress' }}
                 <a href="{% url 'task_delete' task.id %}">Delete</a>
+                <a href="{% url 'task_complete' task.id %}">Done</a>
             </li>
         {% empty %}
             <h1>No tasks</h1>

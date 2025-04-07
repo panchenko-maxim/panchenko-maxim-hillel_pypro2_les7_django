@@ -66,6 +66,12 @@ class TaskDeleteView(LoginRequiredMixin, OwnerOnlyMixin, SuccessMessageMixin, De
     pk_url_kwarg = 'task_id'
     success_message = 'Deleted success!'
 
+def complete_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    task.completed = True
+    task.save(update_fields=['completed'], request=request)
+    return redirect('task_list')
+
 
 
 
