@@ -18,7 +18,7 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     completed = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    status = models.CharField(choices=STATUS_CHOICES, default=MODERATION_STEP)
+    moderation_status = models.IntegerField(choices=STATUS_CHOICES, default=MODERATION_STEP)
 
     def __str__(self):
         return self.title
@@ -37,6 +37,6 @@ class TaskLog(models.Model):
     ]
 
     action_date = models.DateTimeField(auto_now_add=True)
-    action = models.CharField(choices=ACTION_CHOICES)
+    action = models.IntegerField(choices=ACTION_CHOICES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    status = models.CharField(blank=True, null=True, default='Not available')
+    task_status = models.IntegerField(blank=True, null=True, default=Task.MODERATION_STEP)
