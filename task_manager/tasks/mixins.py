@@ -1,7 +1,10 @@
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.template.context_processors import request
+
 from tasks.models import Task
+from tasks.signals import task_title_requirements_create
 
 class OwnerOnlyMixin:
     def dispatch(self, request, *args, **kwargs):
@@ -58,5 +61,6 @@ class RedirectOnErrorMixin:
     on_failure_message = "Error while executing operation"
 
     def form_invalid(self, form):
+        task_title_requirements_create.send(sender=None, request=self.request, instance=form.instance)
         messages.error(self.request, self.on_failure_message)
         return redirect(self.error_redirect_url)

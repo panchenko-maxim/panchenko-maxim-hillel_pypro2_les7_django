@@ -28,12 +28,14 @@ class TaskLog(models.Model):
     UPDATE = 2
     DELETE = 3
     STATUS_CHANGED = 4
+    TASK_LIST_VIEWED = 5
 
     ACTION_CHOICES = [
         (CREATE, 'Task created'),
         (UPDATE, 'Task completed'),
         (DELETE, 'Task deleted'),
-        (STATUS_CHANGED, 'Status changed')
+        (STATUS_CHANGED, 'Status changed'),
+        (TASK_LIST_VIEWED, 'User looked at task list page'),
     ]
 
     action_date = models.DateTimeField(auto_now_add=True)
