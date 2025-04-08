@@ -8,6 +8,7 @@ from tasks.forms import TaskForm
 
 from tasks.mixins import (OwnerOnlyMixin, SuccessMessageMixin, QueryFilterMixin,
                           TaskCounterMixin, RedirectOnErrorMixin)
+from tasks.signals import task_list_view_signal, task_title_requirements_create
 
 
 # @login_required
@@ -21,6 +22,7 @@ class TaskListView(LoginRequiredMixin, QueryFilterMixin, TaskCounterMixin, ListV
     context_object_name = 'tasks'
 
     def get_queryset(self):
+        task_list_view_signal.send(sender=None, request=self.request)
         tasks = super().get_queryset()
         if self.request.user.is_superuser:
             return tasks
@@ -48,6 +50,7 @@ class TaskCreateView(LoginRequiredMixin, SuccessMessageMixin, RedirectOnErrorMix
     error_redirect_url = reverse_lazy('task_list')
 
     def form_valid(self, form):
+        task_title_requirements_create.send(sender=None, request=self.request, instance=form.instance)
         form.instance.user = self.request.user
         return super().form_valid(form)
 

@@ -1,9 +1,7 @@
-from django.core.exceptions import PermissionDenied
-from django.template.context_processors import request
 
 from tasks.models import Task, TaskLog
 from django.db.models.signals import post_save, pre_save, pre_delete
-from django.dispatch import receiver
+from django.dispatch import receiver, Signal
 from django.contrib import messages
 
 @receiver(post_save, sender=Task)
@@ -46,3 +44,25 @@ def moderate_tasks(sender, instance, created=False, update_fields=None,**kwargs)
                 task_status=instance.moderation_status
             )
 
+task_list_view_signal = Signal()
+
+@receiver(task_list_view_signal)
+def log_task_list_view(sender, request, **kwargs):
+    if request:
+        TaskLog.objects.create(
+            action=TaskLog.TASK_LIST_VIEWED,
+            user=request.user
+        )
+        # messages.success(request, f'User {request.user} viewed the task list page')
+
+task_title_requirements_create = Signal()
+
+@receiver(task_title_requirements_create)
+def notify_requirements(sender, request, instance, **kwargs):
+    if request and instance:
+        if len(instance.title) == 0:
+            instance.title = "Default title"
+            instance.user = request.user
+            instance.save()
+        if len(instance.title) < 3:
+            messages.warning(request, f'Its ok, but we recommend the longer title, at least 3 chars')
