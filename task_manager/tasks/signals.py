@@ -24,16 +24,25 @@ def notify_task_deleted_restricted(sender, instance, **kwargs):
     TaskLog.objects.create(action=TaskLog.DELETE, user=instance.user)
 
 @receiver([pre_save, post_save], sender=Task)
-def moderate_tasks(sender, instance, created, **kwargs):
+def moderate_tasks(sender, instance, created=False, update_fields=None,**kwargs):
     if kwargs.get('signal') == pre_save:
-        if instance.pk:
+        if (instance.moderation_status == Task.APPROVED) and not instance.user.is_superuser:
+            instance.moderation_status = Task.MODERATION_STEP
+        elif instance.pk:
             old_task = Task.objects.get(id=instance.pk)
-            if old_task.status != instance.status:
-                TaskLog.objects.create(action=TaskLog.STATUS_CHANGED, user=instance.user, status=instance.status)
-        instance.status = Task.MODERATION_STEP
-    elif kwargs.get('signal') == post_save:
-        if instance.status == Task.APPROVED and instance.user.is_superuser:
-            TaskLog.objects.create(action=TaskLog.STATUS_CHANGED, user=instance.user, status=instance.status)
+            if old_task.moderation_status != instance.moderation_status:
+                TaskLog.objects.create(
+                    action=TaskLog.STATUS_CHANGED,
+                    user=instance.user,
+                    task_status=instance.moderation_status
+                )
         else:
             instance.status = Task.MODERATION_STEP
-            instance.save()
+    elif kwargs.get('signal') == post_save:
+        if (instance.moderation_status == Task.APPROVED) and instance.user.is_superuser:
+            TaskLog.objects.create(
+                action=TaskLog.STATUS_CHANGED,
+                user=instance.user,
+                task_status=instance.moderation_status
+            )
+
