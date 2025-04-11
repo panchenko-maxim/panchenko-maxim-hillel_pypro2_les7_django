@@ -65,4 +65,4 @@ def notify_requirements(sender, request, instance, **kwargs):
             instance.user = request.user
             instance.save()
         if len(instance.title) < 3:
-            messages.warning(request, f'Its ok, but we recommend the longer title, at least 3 chars')
+            messages.warning(request, 'Its ok, but we recommend the longer title, at least 3 chars')
