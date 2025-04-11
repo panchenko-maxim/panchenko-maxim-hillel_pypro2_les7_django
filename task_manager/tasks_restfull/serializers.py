@@ -12,6 +12,6 @@ class TaskSerializer(serializers.ModelSerializer):
         read_only_fields = ['created_at', 'updated_at']
 
     def validate_title(self, value):
-        if len(value) < 3:
-            raise serializers.ValidationError('Name must be include minimum 3 chars')
+        if len(value) < 5:
+            raise serializers.ValidationError('Name must be include minimum 5 chars')
         return value
