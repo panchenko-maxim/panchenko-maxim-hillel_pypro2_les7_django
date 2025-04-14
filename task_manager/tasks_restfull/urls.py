@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from tasks_restfull.views import (TaskModelViewSet, TaskReadOnlyViewSet,
                                   TaskCustomViewSet, TaskFilterViewSet, TaskCreateViewSet,
-                                  TaskUpdateViewSet)
+                                  TaskUpdateViewSet, CustomAuthToken)
 
 
 router = DefaultRouter()
