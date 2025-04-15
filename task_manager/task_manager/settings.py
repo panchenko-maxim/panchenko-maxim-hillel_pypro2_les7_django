@@ -140,9 +140,13 @@ STATIC_ROOT = BASE_DIR / 'static/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'tasks_restfull.authentication.CustomTokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ]
+}
+
+TOKEN_TTL = {
+    "minutes": 2,
 }
