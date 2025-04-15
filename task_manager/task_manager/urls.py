@@ -20,7 +20,8 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from django.shortcuts import render
-from tasks_restfull.views import CustomAuthToken
+# from tasks_restfull.views import CustomAuthToken
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -31,5 +32,7 @@ urlpatterns = [
     path("", lambda request: render(request, "home.html"), name="user_permissions"),
     path("api/", include("tasks_restfull.urls")),
     path("api-auth/", include("rest_framework.urls")),
-    path("token-auth/", CustomAuthToken.as_view(), name="token_auth"),
+    path('api-token/', TokenObtainPairView.as_view(), name='obtain_token'),
+    path('api-token/refresh/', TokenRefreshView.as_view(), name='refresh_token'),
+    # path("token-auth/", CustomAuthToken.as_view(), name="token_auth"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
