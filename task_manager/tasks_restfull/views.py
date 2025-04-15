@@ -1,5 +1,6 @@
 from rest_framework import viewsets, filters, status
-from rest_framework.authentication import TokenAuthentication
+# from rest_framework.authentication import TokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
@@ -18,7 +19,7 @@ class TaskModelViewSet(viewsets.ModelViewSet):
     filterset_fields = ['completed', 'user']
     search_fields = ['title', 'description']
     ordering_fields = ['created_at', 'completed']
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     
     def perform_create(self, serializer):
