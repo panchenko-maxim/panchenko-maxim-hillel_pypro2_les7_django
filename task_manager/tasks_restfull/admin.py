@@ -1,3 +1,5 @@
 from django.contrib import admin
+from tasks_restfull.models import CustomToken
 
-# Register your models here.
+
+admin.site.register(CustomToken)

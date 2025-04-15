@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from tasks_restfull.views import (TaskModelViewSet, TaskReadOnlyViewSet,
                                   TaskCustomViewSet, TaskFilterViewSet, TaskCreateViewSet,
-                                  TaskUpdateViewSet, CustomAuthToken)
+                                  TaskUpdateViewSet, CustomAuthToken, login)
 
 
 router = DefaultRouter()
@@ -15,4 +15,5 @@ router.register(r'task-update', TaskUpdateViewSet, basename='task-update')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('login/', login, name="login"),
 ]
