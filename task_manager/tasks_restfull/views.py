@@ -7,8 +7,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
-from tasks_restfull.authentication import CustomTokenAuthentication
-from tasks_restfull.utils import creat_token_for_user
+from tasks_restfull.authentication import CustomTokenAuthentication, CustomJWTAuthentication
+from tasks_restfull.utils import creat_token_for_user, generate_jwt_token
 from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view, permission_classes
 
@@ -23,7 +23,7 @@ class TaskModelViewSet(viewsets.ModelViewSet):
     filterset_fields = ['completed', 'user']
     search_fields = ['title', 'description']
     ordering_fields = ['created_at', 'completed']
-    authentication_classes = [CustomTokenAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
     permission_classes = [IsAuthenticated]
     
     def perform_create(self, serializer):
@@ -112,6 +112,21 @@ def login(request):
             "token": token.key,
             "expires_at": token.expires_at,
             "role": "staff" if any([user.is_staff, user.is_superuser]) else "member"
+        })
+    return Response({"error": "Wrong credentials"}, status=401)
+
+
+@api_view(["POST"])
+@permission_classes([])
+def login_jwt(request):
+    email = request.data.get("email")
+    password = request.data.get("password")
+
+    user = authenticate(username=email, password=password)
+    if user:
+        token = generate_jwt_token(user)
+        return Response({
+            "access_key": token
         })
     return Response({"error": "Wrong credentials"}, status=401)
 
