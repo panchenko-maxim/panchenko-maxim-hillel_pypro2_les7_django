@@ -1,10 +1,12 @@
 FROM python:3.11-slim
 
+RUN pip install --upgrade pip && apt-get update && apt-get install -y libpq-dev && rm -rf /var/lib/apt/list/*
+
 WORKDIR /app
 
-COPY requirements__.txt .
-RUN pip install --no-cache-dir -r requirements__.txt
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY ./task_manager /app
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+EXPOSE 8000

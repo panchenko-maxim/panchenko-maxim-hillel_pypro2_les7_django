@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>create_message</title>
+</head>
+<body>
+    <h1>Create_message</h1>
+    <form method="post">
+        {% csrf_token %}
+        <textare name="content" required></textare>
+        <br>
+        <button type="submit">Send</button>
+    </form>
+    <a href="{% url 'message_list' %}">View messages</a>
+</body>
+</html>

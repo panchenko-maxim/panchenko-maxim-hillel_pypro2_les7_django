@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./task_manager:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=django_tasks_user_model
+      - POSTGRES_USER=pwd_user
+      - POSTGRES_PASSWORD=pwd_user
+    ports:
+      - 5432:5432
+
+  celery-beat:
+    build: .
+    command: celery -A task_manager beat -l info
+    volumes:
+      - ./task_manager:/app
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+
+  celery-worker:
+    build: .
+    command: celery -A task_manager worker -l info
+    volumes:
+      - ./task_manager:/app
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0

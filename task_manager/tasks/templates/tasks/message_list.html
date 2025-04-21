@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>message_list</title>
+</head>
+<body>
+    <h1>Message list</h1>
+    <ul>
+        {% for message in messages %}
+        	<li>{{ message.content }} - {% if message.sent %}Sent{% else %}Pendin{% endif %}</li>
+        {% empty %}
+            <li>No messages yet</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'create_message' %}">Create new message</a>
+</body>
+</html>
