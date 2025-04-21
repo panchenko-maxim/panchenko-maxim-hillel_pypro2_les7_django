@@ -79,7 +79,7 @@ def create_message(request):
     if request.method == "POST":
         content = request.POST.get('content')
         message = Message.objects.create(content=content)
-        send_message(message.id)
+        send_message.delay(message.id)
         return redirect('message_list')
     return render(request, 'tasks/create_message.html')
 
