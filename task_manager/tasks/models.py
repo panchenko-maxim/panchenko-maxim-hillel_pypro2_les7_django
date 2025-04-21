@@ -42,3 +42,8 @@ class TaskLog(models.Model):
     action = models.IntegerField(choices=ACTION_CHOICES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     task_status = models.IntegerField(blank=True, null=True, default=Task.MODERATION_STEP)
+
+class Message(models.Model):
+    content = models.TextField()
+    sent = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)

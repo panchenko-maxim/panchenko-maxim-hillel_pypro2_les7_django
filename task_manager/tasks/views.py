@@ -3,13 +3,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from tasks.models import Task
+from tasks.models import Task, Message
 from tasks.forms import TaskForm
 
 from tasks.mixins import (OwnerOnlyMixin, SuccessMessageMixin, QueryFilterMixin,
                           TaskCounterMixin, RedirectOnErrorMixin)
 from tasks.signals import task_list_view_signal, task_title_requirements_create
-
+from tasks.tasks import send_message
 
 # @login_required
 # def tasks_list(request):
@@ -75,6 +75,18 @@ def complete_task(request, task_id):
     task.save(update_fields=['completed'], request=request)
     return redirect('task_list')
 
+def create_message(request):
+    if request.method == "POST":
+        content = request.POST.get('content')
+        message = Message.objects.create(content=content)
+        send_message(message.id)
+        return redirect('message_list')
+    return render(request, 'tasks/create_message.html')
+
+def message_list(request):
+    messages = Message.objects.all()
+    return render(request, 'tasks/message_list.html',
+                  {'messages': messages})
 
 
 
