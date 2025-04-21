@@ -87,7 +87,7 @@ DATABASES = {
         'NAME': 'django_tasks_user_model',
         'USER': 'pwd_user',
         'PASSWORD': 'pwd_user',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
