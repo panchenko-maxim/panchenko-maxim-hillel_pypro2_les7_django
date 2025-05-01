@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,7 @@
     <title>Title</title>
 </head>
 <body>
-    <a href="{% url 'task_create' %}">Add task</a>
+    <a href="{% url 'task_create' %}">{% trans "Add task" %}</a>
     <div class="messages">
         {% if messages %}
             {% for message in messages %}
@@ -15,28 +16,28 @@
     </div>
 
     <div>
-        <a href="?completed=true">Completed tasks</a>
-        <a href="?completed=false">In progress tasks</a>
-        <a href="?">All tasks</a>
+        <a href="?completed=true">{% trans "Completed tasks" %}</a>
+        <a href="?completed=false">{% trans "In progress tasks" %}</a>
+        <a href="?">{% trans "All tasks" %}</a>
     </div>
 
     <br>
 
     <div>
-        <p>Total: {{ total_tasks }}</p>
-        <p>Done: {{ completed_tasks }}</p>
-        <p>In progress: {{ is_progress_tasks }}</p>
+        <p>{% blocktrans %}Total: {{ total_tasks }}{% endblocktrans %}</p>
+        <p>{% trans "Done: " %}{{ completed_tasks }}</p>
+        <p>{% trans "In progress: " %}{{ is_progress_tasks }}</p>
     </div>
 
     <ul>
         {% for task in tasks %}
             <li>
                 {{ task.title }} - {{ task.completed|yesno:'Done, In Progress' }}
-                <a href="{% url 'task_delete' task.id %}">Delete</a>
-                <a href="{% url 'task_complete' task.id %}">Done</a>
+                <a href="{% url 'task_delete' task.id %}">{% trans "Delete" %}</a>
+                <a href="{% url 'task_complete' task.id %}">{% trans "Done" %}</a>
             </li>
         {% empty %}
-            <h1>No tasks</h1>
+            <h1>{% trans "No tasks" %}</h1>
         {% endfor %}
     </ul>
 

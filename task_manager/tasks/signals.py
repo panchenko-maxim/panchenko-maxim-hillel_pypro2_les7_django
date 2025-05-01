@@ -2,6 +2,7 @@
 from tasks.models import Task, TaskLog
 from django.db.models.signals import post_save, pre_save, pre_delete
 from django.dispatch import receiver, Signal
+from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 
 @receiver(post_save, sender=Task)
@@ -65,4 +66,4 @@ def notify_requirements(sender, request, instance, **kwargs):
             instance.user = request.user
             instance.save()
         if len(instance.title) < 3:
-            messages.warning(request, 'Its ok, but we recommend the longer title, at least 3 chars')
+            messages.warning(request, _('Its ok, but we recommend the longer title, at least 3 chars'))
