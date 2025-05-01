@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,14 +6,14 @@
     <title>message_list</title>
 </head>
 <body>
-    <h1>Message list</h1>
+    <h1>{% trans "Message list" %}</h1>
     <ul>
         {% for message in messages %}
-        	<li>{{ message.content }} - {% if message.sent %}Sent{% else %}Pendin{% endif %}</li>
+        	<li>{{ message.content }} - {% if message.sent %}{% trans "Sent" %}{% else %}{% trans "Pending" %}{% endif %}</li>
         {% empty %}
-            <li>No messages yet</li>
+            <li>{% trans "No messages yet" %}</li>
         {% endfor %}
     </ul>
-    <a href="{% url 'create_message' %}">Create new message</a>
+    <a href="{% url 'create_message' %}">{% trans "Create new message" %}</a>
 </body>
 </html>

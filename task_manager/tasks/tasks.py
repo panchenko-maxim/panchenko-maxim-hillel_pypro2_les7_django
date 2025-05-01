@@ -1,6 +1,9 @@
 from celery import shared_task
 from django.core.mail import send_mail
 from tasks.models import Message
+import logging
+
+logger = logging.getLogger(__name__)
 
 @shared_task
 def send_message(message_id):
@@ -16,3 +19,9 @@ def send_message(message_id):
 
     message.sent = True
     message.save()
+
+
+@shared_task
+def log_sent_messages_count():
+    message_count = Message.objects.filter(sent=True).count()
+    logger.info(f'Total sent messages is: {message_count}')

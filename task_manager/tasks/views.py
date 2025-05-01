@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from tasks.models import Task, Message
 from tasks.forms import TaskForm
 
@@ -46,7 +47,7 @@ class TaskCreateView(LoginRequiredMixin, SuccessMessageMixin, RedirectOnErrorMix
     form_class = TaskForm
     template_name = 'tasks/create_task.html'
     success_url = reverse_lazy('task_list')
-    success_message = 'Task created success!'
+    success_message = _('Task created success!')
     error_redirect_url = reverse_lazy('task_list')
 
     def form_valid(self, form):
@@ -67,7 +68,7 @@ class TaskDeleteView(LoginRequiredMixin, OwnerOnlyMixin, SuccessMessageMixin, De
     template_name = 'tasks/confirm_delete.html'
     success_url = reverse_lazy('task_list')
     pk_url_kwarg = 'task_id'
-    success_message = 'Deleted success!'
+    success_message = _('Deleted success!')
 
 def complete_task(request, task_id):
     task = get_object_or_404(Task, id=task_id)

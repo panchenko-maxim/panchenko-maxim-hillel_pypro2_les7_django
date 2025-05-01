@@ -1,15 +1,16 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{% trans "Title" %}</title>
 </head>
 <body>
     <h2>Delete "{{ task.title }}"?</h2>
     <form method="post">
         {% csrf_token %}
-        <button type="submit"> Yes, delete!</button>
+        <button type="submit">{% trans "Yes, delete!" %}</button>
     </form>
-    <a href="{% url 'task_list' %}">Back to the list</a>
+    <a href="{% url 'task_list' %}">{% trans "Back to the list" %}</a>
 </body>
 </html>
